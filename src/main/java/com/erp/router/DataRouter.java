@@ -392,4 +392,43 @@ public class DataRouter {
         @Override
         public int order() { return Integer.MAX_VALUE; }
     }
+
+    // ═══════════════════════════════════════════
+    //  CrudPanel 桥接 — 经拦截器链执行 SQL
+    // ═══════════════════════════════════════════
+
+    public int executeUpdate(String sql, Object... params) {
+        RoutingRequest req = new RoutingRequest(
+            "CrudPanel", "update", sql, TenantContext.getCurrentTenantId());
+        RoutingContext ctx = new RoutingContext(req, kernel);
+        try {
+            for (RoutingInterceptor i : interceptors) {
+                if (!i.preHandle(ctx)) throw new com.erp.exception.DataAccessException("操作被拦截");
+            }
+            int result = com.erp.db.DatabaseManager.getInstance().executeUpdate(sql, params);
+            for (RoutingInterceptor i : interceptors) i.postHandle(ctx, result);
+            return result;
+        } catch (com.erp.exception.DataAccessException e) { throw e; }
+        catch (Exception e) { throw new com.erp.exception.DataAccessException(e.getMessage(), e); }
+    }
+
+    public <T> T executeQuery(String sql, com.erp.db.DatabaseManager.ResultSetHandler<T> handler, Object... params) {
+        RoutingRequest req = new RoutingRequest(
+            "CrudPanel", "query", sql, TenantContext.getCurrentTenantId());
+        RoutingContext ctx = new RoutingContext(req, kernel);
+        try {
+            for (RoutingInterceptor i : interceptors) {
+                if (!i.preHandle(ctx)) throw new com.erp.exception.DataAccessException("查询被拦截");
+            }
+            T result = com.erp.db.DatabaseManager.getInstance().executeQuery(sql, handler, params);
+            for (RoutingInterceptor i : interceptors) i.postHandle(ctx, result);
+            return result;
+        } catch (com.erp.exception.DataAccessException e) { throw e; }
+        catch (Exception e) { throw new com.erp.exception.DataAccessException(e.getMessage(), e); }
+    }
+
+    @FunctionalInterface
+    public interface ResultSetHandler<T> {
+        T handle(java.sql.ResultSet rs) throws java.sql.SQLException;
+    }
 }

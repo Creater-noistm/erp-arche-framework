@@ -1,6 +1,7 @@
 package com.erp.db;
 
 import com.erp.config.ConfigManager;
+import com.erp.exception.DataAccessException;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -62,7 +63,7 @@ public class DatabaseManager {
             log.error("❌ 无法连接到主节点 MySQL ({}:{}): {}",
                 ConfigManager.getDbHost(), ConfigManager.getDbPort(), e.getMessage());
             instance = null;
-            throw new RuntimeException("主节点不在线 — 数据库连接失败: " + e.getMessage(), e);
+            throw new DataAccessException("主节点不在线 — 数据库连接失败: " + e.getMessage(), e);
         }
 
         instance.verifyTables();
@@ -75,7 +76,7 @@ public class DatabaseManager {
             DatabaseMetaData meta = conn.getMetaData();
             log.info("MySQL connected: {} @ {}", meta.getDatabaseProductName(), url);
         } catch (SQLException e) {
-            throw new RuntimeException("MySQL连接失败", e);
+            throw new DataAccessException("MySQL连接失败", e);
         }
     }
 
@@ -128,7 +129,7 @@ public class DatabaseManager {
             return ps.executeUpdate();
         } catch (SQLException e) {
             log.error("SQL 执行失败: {}", sql, e);
-            throw new RuntimeException("数据库操作失败: " + e.getMessage(), e);
+            throw new DataAccessException("数据库操作失败: " + e.getMessage(), e);
         }
     }
 
@@ -144,7 +145,7 @@ public class DatabaseManager {
             }
         } catch (SQLException e) {
             log.error("SQL 查询失败: {}", sql, e);
-            throw new RuntimeException("数据库查询失败: " + e.getMessage(), e);
+            throw new DataAccessException("数据库查询失败: " + e.getMessage(), e);
         }
     }
 
@@ -163,7 +164,7 @@ public class DatabaseManager {
             if (conn != null) {
                 try { conn.rollback(); } catch (SQLException se) { /* ignore */ }
             }
-            throw new RuntimeException("事务执行失败: " + e.getMessage(), e);
+            throw new DataAccessException("事务执行失败: " + e.getMessage(), e);
         } finally {
             if (conn != null) {
                 try {

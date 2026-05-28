@@ -1,6 +1,7 @@
 package com.erp.ui;
 
 import com.erp.db.DatabaseManager;
+import com.erp.kernel.MicroKernel;
 import com.erp.tenant.TenantContext;
 
 import org.slf4j.Logger;
@@ -242,8 +243,9 @@ public class CrudPanel extends JPanel {
             isNew ? "新增" : "编辑", JOptionPane.OK_CANCEL_OPTION);
         if (result != JOptionPane.OK_OPTION) return;
 
-        // 收集值 + 日期字段验证
+        // 收集值 + 日期/必填验证
         Map<String, String> values = new LinkedHashMap<>();
+        boolean hasEmpty = false;
         for (var e : fields.entrySet()) {
             JComponent comp = e.getValue();
             String val;
@@ -262,7 +264,16 @@ public class CrudPanel extends JPanel {
                     return;
                 }
             }
+            if (val.isEmpty() && !e.getKey().dbColumn.equals("remark") && !e.getKey().dbColumn.equals("description")) {
+                hasEmpty = true;
+            }
             values.put(e.getKey().dbColumn, val);
+        }
+        if (hasEmpty && isNew) {
+            JOptionPane.showMessageDialog(this,
+                "存在必填字段为空，请检查后重试。", "校验失败", JOptionPane.WARNING_MESSAGE);
+            showForm(existingRow); // 重新打开表单
+            return;
         }
 
         if (isNew) {
@@ -279,7 +290,7 @@ public class CrudPanel extends JPanel {
             String cols = String.join(", ", values.keySet());
             String placeholders = String.join(", ", values.keySet().stream().map(k -> "?").toList());
             try {
-                DatabaseManager.getInstance().executeUpdate(
+                executeWrite(
                     "INSERT INTO " + tableName + " (" + cols + ") VALUES (" + placeholders + ")",
                     values.values().toArray());
             } catch (RuntimeException ex) {
@@ -299,7 +310,7 @@ public class CrudPanel extends JPanel {
                 where += " AND tenant_id=?";
                 params.add(tenantId);
             }
-            DatabaseManager.getInstance().executeUpdate(
+            executeWrite(
                 "UPDATE " + tableName + " SET " + setClause + where,
                 params.toArray());
         }
@@ -318,17 +329,17 @@ public class CrudPanel extends JPanel {
             "确认删除「" + display + "」？", "确认删除", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             if (tenantId != null && !tenantId.isEmpty()) {
-                DatabaseManager.getInstance().executeUpdate(
+                executeWrite(
                     "DELETE FROM " + tableName + " WHERE " + idCol + "=? AND tenant_id=?", idVal, tenantId);
             } else {
-                DatabaseManager.getInstance().executeUpdate(
+                executeWrite(
                     "DELETE FROM " + tableName + " WHERE " + idCol + "=?", idVal);
             }
             // 审计日志
             try {
                 String operator = getCurrentUser();
                 String tenantId = TenantContext.getCurrentTenantId();
-                DatabaseManager.getInstance().executeUpdate(
+                executeWrite(
                     "INSERT INTO erp_audit_log (tenant_id, user_id, action, entity_type, entity_id, details_json) VALUES (?,?,?,'DELETE',?,?)",
                     tenantId, operator, tableName, idVal,
                     "{\"deleted_by\":\"" + operator + "\",\"display\":\"" + display + "\"}");
@@ -340,6 +351,28 @@ public class CrudPanel extends JPanel {
     }
 
     // ── 辅助 ──
+
+    /** 写入操作经过 DataRouter（走拦截器链：租户隔离+审计） */
+    private int executeWrite(String sql, Object... params) {
+        try {
+            MicroKernel mk = MicroKernel.getInstance();
+            if (mk != null && mk.getDataRouter() != null) {
+                return mk.getDataRouter().executeUpdate(sql, params);
+            }
+        } catch (Exception ignored) {}
+        return DatabaseManager.getInstance().executeUpdate(sql, params);
+    }
+
+    /** 查询操作经过 DataRouter */
+    private <T> T executeRead(String sql, com.erp.db.DatabaseManager.ResultSetHandler<T> handler, Object... params) {
+        try {
+            MicroKernel mk = MicroKernel.getInstance();
+            if (mk != null && mk.getDataRouter() != null) {
+                return mk.getDataRouter().executeQuery(sql, handler, params);
+            }
+        } catch (Exception ignored) {}
+        return DatabaseManager.getInstance().executeQuery(sql, rs -> { try { return handler.handle(rs); } catch (java.sql.SQLException e) { throw new RuntimeException(e); } }, params);
+    }
 
     /** 判断当前表是否使用自增 ID（查数据库元数据，不硬编码） */
     private boolean hasAutoIncrementId() {
