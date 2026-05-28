@@ -52,16 +52,16 @@ public class CrudPanel extends JPanel {
         // 工具栏
         JPanel toolBar = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 4));
 
-        JButton refreshBtn = new JButton("🔄 刷新");
+        JButton refreshBtn = new JButton("刷新");
         refreshBtn.addActionListener(e -> refresh());
         toolBar.add(refreshBtn);
 
         if (!readOnly) {
-            JButton addBtn = new JButton("➕ 新增");
+            JButton addBtn = new JButton("新增");
             addBtn.addActionListener(e -> showForm(null));
             toolBar.add(addBtn);
 
-            JButton editBtn = new JButton("✏️ 编辑");
+            JButton editBtn = new JButton("编辑");
             editBtn.addActionListener(e -> {
                 int row = table.getSelectedRow();
                 if (row >= 0) showForm(tableModel.getRow(row));
@@ -69,7 +69,7 @@ public class CrudPanel extends JPanel {
             });
             toolBar.add(editBtn);
 
-            JButton delBtn = new JButton("🗑 删除");
+            JButton delBtn = new JButton("删除");
             delBtn.addActionListener(e -> deleteSelected());
             toolBar.add(delBtn);
         }
@@ -86,14 +86,14 @@ public class CrudPanel extends JPanel {
             public void changedUpdate(javax.swing.event.DocumentEvent e) { doFilter(); }
         });
         // 导出按钮（所有人可用）
-        JButton exportBtn = new JButton("📥 导出");
+        JButton exportBtn = new JButton("导出");
         exportBtn.addActionListener(e -> exportToCSV());
         toolBar.add(exportBtn);
 
         // 导入按钮（仅管理员）
         boolean isAdmin = isCurrentUserAdmin();
         if (isAdmin && !readOnly) {
-            JButton importBtn = new JButton("📤 导入");
+            JButton importBtn = new JButton("导入");
             importBtn.addActionListener(e -> importFromCSV());
             toolBar.add(importBtn);
         }

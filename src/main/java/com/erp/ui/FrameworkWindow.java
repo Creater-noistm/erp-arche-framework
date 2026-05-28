@@ -101,6 +101,7 @@ public class FrameworkWindow extends JFrame {
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override public void windowClosing(java.awt.event.WindowEvent e) { shutdown(); }
         });
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setSize(1400, 900);
         setMinimumSize(new Dimension(1024, 600));
         setLocationRelativeTo(null);
@@ -157,7 +158,7 @@ public class FrameworkWindow extends JFrame {
         contentPane.setBorder(new EmptyBorder(4, 4, 4, 4));
 
         // 默认欢迎面板
-        contentPane.addTab("🏠 首页", createWelcomePanel(), false);
+        contentPane.addTab("首页", createWelcomePanel(), false);
 
         // 监听标签关闭事件 → 清理缓存
         contentPane.addContainerListener(new java.awt.event.ContainerAdapter() {
@@ -188,17 +189,17 @@ public class FrameworkWindow extends JFrame {
 
         // 系统管理员 → 只显示系统管理导航
         if (loginSession != null && loginSession.isSystemAdmin()) {
-            DefaultMutableTreeNode sysAdminNode = new DefaultMutableTreeNode("🚀 系统管理");
+            DefaultMutableTreeNode sysAdminNode = new DefaultMutableTreeNode("系统管理");
             // 公司管理 → 回到首页 Dashboard
-            addMenuNode(sysAdminNode, new String[]{"🏢 公司管理"}, 0, () -> {
+            addMenuNode(sysAdminNode, new String[]{"公司管理"}, 0, () -> {
                 closeAllPanels();
                 JPanel dashboard = createAdminDashboard();
                 contentPane.addTab("🏠 首页", dashboard, false);
                 openPanels.put("🏠 首页", dashboard);
                 contentPane.setSelectedComponent(dashboard);
             }, "system");
-            addMenuNode(sysAdminNode, new String[]{"⚙ 模块管理"}, 0, () -> showModuleManager(), "system");
-            addMenuNode(sysAdminNode, new String[]{"🔧 系统配置"}, 0, () -> showConfigDialog(), "system");
+            addMenuNode(sysAdminNode, new String[]{"模块管理"}, 0, () -> showModuleManager(), "system");
+            addMenuNode(sysAdminNode, new String[]{"系统配置"}, 0, () -> showConfigDialog(), "system");
             root.add(sysAdminNode);
         } else {
             // 普通用户 — 按模块分组构建导航树
@@ -435,7 +436,7 @@ public class FrameworkWindow extends JFrame {
     public void closeAllPanels() {
         contentPane.removeAll();
         openPanels.clear();
-        contentPane.addTab("🏠 首页", createWelcomePanel(), false);
+        contentPane.addTab("首页", createWelcomePanel(), false);
     }
 
     // ── 定时自动刷新 ──
@@ -780,18 +781,18 @@ public class FrameworkWindow extends JFrame {
 
         JPanel verBar = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 2));
         verBar.setOpaque(false);
-        JLabel verLabel = new JLabel("📦 v" + readLocalVersion());
+        JLabel verLabel = new JLabel("v" + readLocalVersion());
         verLabel.setFont(new Font("微软雅黑", Font.PLAIN, 12));
-        JButton checkBtn = new JButton("🔍 检查更新");
+        JButton checkBtn = new JButton("检查更新");
         checkBtn.addActionListener(e -> {
             currentVersion = null; ignoredVersion = "";
             checkVersionUpdate();
         });
-        JButton publishBtn = new JButton("📤 发布新版本");
+        JButton publishBtn = new JButton("发布新版本");
         publishBtn.addActionListener(e -> publishNewVersion());
-        JButton roleBtn = new JButton("🔐 角色管理");
+        JButton roleBtn = new JButton("角色管理");
         roleBtn.addActionListener(e -> openRoleManager());
-        JButton notifyBtn = new JButton("📢 系统公告");
+        JButton notifyBtn = new JButton("系统公告");
         notifyBtn.setForeground(new Color(234, 67, 53));
         notifyBtn.addActionListener(e -> sendSystemAnnouncement());
         verBar.add(verLabel);
@@ -810,10 +811,10 @@ public class FrameworkWindow extends JFrame {
 
         JPanel cards = new JPanel(new GridLayout(1, 4, 12, 0));
         cards.setOpaque(false);
-        cards.add(metricCard("🏢 公司总数", total + " 家", new Color(66, 133, 244)));
-        cards.add(metricCard("✅ 正常使用", active + " 家", new Color(52, 168, 83)));
-        cards.add(metricCard("⏳ 试用期", trial + " 家", new Color(251, 188, 4)));
-        cards.add(metricCard("⚠ 已到期", expired + " 家", new Color(234, 67, 53)));
+        cards.add(metricCard("公司总数", total + " 家", new Color(66, 133, 244)));
+        cards.add(metricCard("正常使用", active + " 家", new Color(52, 168, 83)));
+        cards.add(metricCard("试用期", trial + " 家", new Color(251, 188, 4)));
+        cards.add(metricCard("已到期", expired + " 家", new Color(234, 67, 53)));
 
         panel.add(cards, BorderLayout.CENTER);
 

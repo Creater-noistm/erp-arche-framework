@@ -80,7 +80,7 @@ public class LoginDialog extends JDialog {
 
         // 用户名输入框
         g.gridy = 0; g.insets = new Insets(2, 0, 2, 0);
-        JLabel userIcon = new JLabel("👤 用户名");
+        JLabel userIcon = new JLabel("用户名");
         userIcon.setFont(new Font("微软雅黑", Font.PLAIN, 12));
         userIcon.setForeground(new Color(100, 100, 100));
         formPanel.add(userIcon, g);
@@ -95,7 +95,7 @@ public class LoginDialog extends JDialog {
 
         // 密码输入框
         g.gridy = 2; g.insets = new Insets(2, 0, 2, 0);
-        JLabel pwdIcon = new JLabel("🔒 密码");
+        JLabel pwdIcon = new JLabel("密码");
         pwdIcon.setFont(new Font("微软雅黑", Font.PLAIN, 12));
         pwdIcon.setForeground(new Color(100, 100, 100));
         formPanel.add(pwdIcon, g);
