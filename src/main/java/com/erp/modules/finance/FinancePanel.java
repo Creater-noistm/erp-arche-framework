@@ -82,10 +82,10 @@ public class FinancePanel extends JPanel {
 
         JPanel row = new JPanel(new GridLayout(1, 4, 12, 0));
         row.setOpaque(false);
-        row.add(metricCard("💰 本月收入", "¥ " + fmt(revenue), C_REVENUE));
-        row.add(metricCard("💳 本月支出", "¥ " + fmt(expense), C_EXPENSE));
-        row.add(metricCard("📈 净利润", "¥ " + fmt(profit), profit >= 0 ? C_PROFIT : C_EXPENSE));
-        row.add(metricCard("📋 应收账款", "¥ " + fmt(ar), C_AR));
+        row.add(metricCard("本月收入", "¥ " + fmt(revenue), C_REVENUE));
+        row.add(metricCard("本月支出", "¥ " + fmt(expense), C_EXPENSE));
+        row.add(metricCard("净利润", "¥ " + fmt(profit), profit >= 0 ? C_PROFIT : C_EXPENSE));
+        row.add(metricCard("应收账款", "¥ " + fmt(ar), C_AR));
         return row;
     }
 

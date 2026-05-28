@@ -85,10 +85,10 @@ public class HRPanel extends JPanel {
 
         JPanel row = new JPanel(new GridLayout(1, 4, 12, 0));
         row.setOpaque(false);
-        row.add(metricCard("👨‍💼 在职员工", empCount + " 人", new Color(50, 120, 200)));
-        row.add(metricCard("📅 本月入职", newEmp + " 人", new Color(80, 170, 80)));
-        row.add(metricCard("🚪 本月离职", resigned + " 人", new Color(200, 80, 80)));
-        row.add(metricCard("📊 离职率", String.format("%.1f%%", turnover), new Color(200, 130, 50)));
+        row.add(metricCard("在职员工", empCount + " 人", new Color(50, 120, 200)));
+        row.add(metricCard("本月入职", newEmp + " 人", new Color(80, 170, 80)));
+        row.add(metricCard("本月离职", resigned + " 人", new Color(200, 80, 80)));
+        row.add(metricCard("离职率", String.format("%.1f%%", turnover), new Color(200, 130, 50)));
         return row;
     }
 

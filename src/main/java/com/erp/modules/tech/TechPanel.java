@@ -68,10 +68,10 @@ public class TechPanel extends JPanel {
 
         JPanel row = new JPanel(new GridLayout(1, 4, 12, 0));
         row.setOpaque(false);
-        row.add(metricCard("📦 产品总数", productCnt + " 种", C_PRODUCT));
-        row.add(metricCard("🧩 BOM条目", bomCnt + " 条", C_BOM));
-        row.add(metricCard("🏷 产品类别", catCnt + " 类", C_CAT));
-        row.add(metricCard("⚙ 部件种类", compCnt + " 种", C_COMP));
+        row.add(metricCard("产品总数", productCnt + " 种", C_PRODUCT));
+        row.add(metricCard("BOM条目", bomCnt + " 条", C_BOM));
+        row.add(metricCard("产品类别", catCnt + " 类", C_CAT));
+        row.add(metricCard("部件种类", compCnt + " 种", C_COMP));
         return row;
     }
 

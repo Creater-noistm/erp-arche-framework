@@ -294,8 +294,9 @@ public class CrudPanel extends JPanel {
                     "INSERT INTO " + tableName + " (" + cols + ") VALUES (" + placeholders + ")",
                     values.values().toArray());
             } catch (RuntimeException ex) {
+                log.error("新增记录失败", ex);
                 JOptionPane.showMessageDialog(this,
-                    "新增失败: " + ex.getMessage() + "\n\n请检查必填字段是否已填写完整。",
+                    "新增失败，请检查必填字段是否已填写完整。",
                     "操作失败", JOptionPane.ERROR_MESSAGE);
                 return;
             }

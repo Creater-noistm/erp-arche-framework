@@ -489,7 +489,7 @@ public class FrameworkWindow extends JFrame {
                 }
             }
         } catch (Exception e) {
-            System.err.println("[Notify] load failed: " + e.getMessage());
+            log.warn("[Notify] load failed: {}", e.getMessage());
         }
     }
 
@@ -501,7 +501,7 @@ public class FrameworkWindow extends JFrame {
                 java.nio.file.StandardOpenOption.CREATE,
                 java.nio.file.StandardOpenOption.APPEND);
         } catch (Exception e) {
-            System.err.println("[Notify] save failed: " + e.getMessage());
+            log.warn("[Notify] save failed: {}", e.getMessage());
         }
     }
 

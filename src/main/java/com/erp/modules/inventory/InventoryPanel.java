@@ -90,10 +90,10 @@ public class InventoryPanel extends JPanel {
 
         JPanel row = new JPanel(new GridLayout(1, 4, 12, 0));
         row.setOpaque(false);
-        row.add(metricCard("📦 产品总数", productCount + " 种", C_PRODUCT));
-        row.add(metricCard("🏷 品类", catCount + " 类", C_CAT));
-        row.add(metricCard("📊 库存总量", fmt(totalStock) + " 件", C_STOCK));
-        row.add(metricCard("⚠ 短缺物资", shortage + " 项", shortage > 0 ? C_SHORT : C_CAT));
+        row.add(metricCard("产品总数", productCount + " 种", C_PRODUCT));
+        row.add(metricCard("品类", catCount + " 类", C_CAT));
+        row.add(metricCard("库存总量", fmt(totalStock) + " 件", C_STOCK));
+        row.add(metricCard("短缺物资", shortage + " 项", shortage > 0 ? C_SHORT : C_CAT));
         return row;
     }
 

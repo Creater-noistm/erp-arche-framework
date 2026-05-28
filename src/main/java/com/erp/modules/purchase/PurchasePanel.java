@@ -80,10 +80,10 @@ public class PurchasePanel extends JPanel {
 
         JPanel row = new JPanel(new GridLayout(1, 4, 12, 0));
         row.setOpaque(false);
-        row.add(metricCard("🏭 供应商", supplierCnt + " 家", C_SUPPLIER));
-        row.add(metricCard("📦 本月入库批次", batchCnt + " 批", C_BATCHES));
-        row.add(metricCard("💰 本月采购金额", "¥ " + fmt(totalAmt), C_AMOUNT));
-        row.add(metricCard("📊 平均批次金额", "¥ " + fmt(avgAmt), C_AVG));
+        row.add(metricCard("供应商", supplierCnt + " 家", C_SUPPLIER));
+        row.add(metricCard("本月入库批次", batchCnt + " 批", C_BATCHES));
+        row.add(metricCard("本月采购金额", "¥ " + fmt(totalAmt), C_AMOUNT));
+        row.add(metricCard("平均批次金额", "¥ " + fmt(avgAmt), C_AVG));
         return row;
     }
 
