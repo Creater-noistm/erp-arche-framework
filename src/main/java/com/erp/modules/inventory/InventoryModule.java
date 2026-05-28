@@ -219,7 +219,7 @@ public class InventoryModule implements ErpModule {
 
     @Override
     public Map<String, JPanel> getPanelContributions() {
-        return Map.of("📦 库存概览", new InventoryPanel());
+        return Map.of("库存概览", new InventoryPanel());
     }
 
     @Override

@@ -72,7 +72,7 @@ public class TechModule implements ErpModule {
 
     @Override
     public Map<String, JPanel> getPanelContributions() {
-        return Map.of("🔧 技术概览", new TechPanel());
+        return Map.of("技术概览", new TechPanel());
     }
 
     @Override public List<Action> getToolbarActions() { return List.of(); }

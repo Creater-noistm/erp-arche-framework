@@ -235,7 +235,7 @@ public class FinanceModule implements ErpModule {
 
     @Override
     public Map<String, JPanel> getPanelContributions() {
-        return Map.of("📊 财务概览", new FinancePanel());
+        return Map.of("财务概览", new FinancePanel());
     }
 
     @Override

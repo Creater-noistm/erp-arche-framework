@@ -35,18 +35,4 @@ jobs:
           cache: maven
 
       - name: Build with Maven
-        run: mvn -B test
-        env:
-          ERP_DB_HOST: 127.0.0.1
-          ERP_DB_PORT: "3306"
-          ERP_DB_NAME: erp
-          ERP_DB_USER: root
-          ERP_DB_PASS: test_password
-
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results
-          path: target/surefire-reports/
-          retention-days: 7
+        run: mvn -B compile

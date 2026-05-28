@@ -262,7 +262,7 @@ public class HRModule implements ErpModule {
 
     @Override
     public Map<String, JPanel> getPanelContributions() {
-        return Map.of("👥 人力资源概览", new HRPanel());
+        return Map.of("人力资源概览", new HRPanel());
     }
 
     @Override

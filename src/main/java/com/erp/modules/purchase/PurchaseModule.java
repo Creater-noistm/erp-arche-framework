@@ -67,7 +67,7 @@ public class PurchaseModule implements ErpModule {
 
     @Override
     public Map<String, JPanel> getPanelContributions() {
-        return Map.of("📋 采购概览", new PurchasePanel());
+        return Map.of("采购概览", new PurchasePanel());
     }
 
     @Override public List<Action> getToolbarActions() { return List.of(); }
