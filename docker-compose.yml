@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: erp-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-erp_root_2024}
+      MYSQL_DATABASE: erp
+      MYSQL_USER: erp_admin
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-erp_admin_2024}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/01-init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    container_name: erp-app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ERP_DB_HOST: db
+      ERP_DB_PORT: "3306"
+      ERP_DB_NAME: erp
+      ERP_DB_USER: erp_admin
+      ERP_DB_PASS: ${MYSQL_PASSWORD:-erp_admin_2024}
+    ports:
+      - "8080:8080"
+
+volumes:
+  mysql_data:

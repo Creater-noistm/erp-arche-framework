@@ -1,0 +1,16 @@
+target/
+*.class
+*.jar
+*.war
+.idea/
+*.iml
+.settings/
+.project
+.classpath
+logs/
+*.log
+notifications.seen
+*.bat
+!启动*.bat
+.DS_Store
+Thumbs.db

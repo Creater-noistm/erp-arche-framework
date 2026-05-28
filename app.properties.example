@@ -1,0 +1,7 @@
+#ERP Config — 复制此文件为 app.properties 并填入实际值
+update.url=
+db.user=root
+db.port=3306
+db.pass=erp2024
+db.host=127.0.0.1
+db.name=erp
